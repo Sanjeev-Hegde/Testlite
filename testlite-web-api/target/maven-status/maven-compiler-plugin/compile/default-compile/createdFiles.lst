@@ -1,2 +1,2 @@
-com\testlite\MyApp.class
-com\testlite\Jsontest.class
+com\testlite\model\Persondetails.class
+com\testlite\controllers\JsonController.class
