@@ -1,2 +1,3 @@
 com\testlite\model\Persondetails.class
+com\testlite\model\JsonData.class
 com\testlite\controllers\JsonController.class
