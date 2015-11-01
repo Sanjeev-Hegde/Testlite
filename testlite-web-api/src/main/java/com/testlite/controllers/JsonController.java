@@ -1,6 +1,8 @@
 package com.testlite.controllers;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.json.JSONException;
@@ -47,17 +49,18 @@ public class JsonController {
         return jsonData;
  }
 	@RequestMapping(value = "MongoGet/{name}",produces=MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
-    public @ResponseBody JsonData getDummyData(@PathVariable("name") String Name) {
+    public @ResponseBody List<String> getDummyData(@PathVariable("name") String Name) {
 	 //Persondetails  person = new Persondetails("Sanjeev",22);
       //  return person;
+		List<String> userList= new ArrayList<String>();
 		try{
-			MongoClient mongoClient = new MongoClient( "192.168.0.100" , 27017 );
-			DB db = mongoClient.getDB( "education" );
-			DBCollection coll = db.getCollection("userdata");
+			MongoClient mongoClient = new MongoClient( "192.168.0.102" , 27017 );
+			DB db = mongoClient.getDB( "TestLite" );
+			DBCollection coll = db.getCollection("UserTable");
 			
 			///// inserting data into collection :working
-			BasicDBObject doc = new BasicDBObject("jsonString", Name);
-			coll.insert(doc);
+			//BasicDBObject doc = new BasicDBObject("jsonString", Name);
+			//coll.insert(doc);
 			
 			////////////////////////////////////////////////////
 			
@@ -81,7 +84,8 @@ public class JsonController {
 			DBCursor cursor = coll.find();
 			try {
 			   while(cursor.hasNext()) {
-			       System.out.println(cursor.next());
+			       //System.out.println(cursor.next());
+			       userList.add(cursor.next().toString());
 			   }
 			} finally {
 			   cursor.close();
@@ -95,8 +99,8 @@ public class JsonController {
 		} finally {
 			//Always excecuted
 		}
-		JsonData jsonData= new JsonData("Mongo Data");
-		return jsonData;
+		
+		return userList;
     }
 	
 }
