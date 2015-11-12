@@ -2,8 +2,9 @@ package com.testlite.controllers;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,11 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.testlite.model.JsonData;
 
@@ -49,12 +48,13 @@ public class JsonController {
         return jsonData;
  }
 	@RequestMapping(value = "MongoGet/{name}",produces=MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
-    public @ResponseBody List<String> getDummyData(@PathVariable("name") String Name) {
+    public @ResponseBody Map<String,List> getDummyData(@PathVariable("name") String Name) {
 	 //Persondetails  person = new Persondetails("Sanjeev",22);
       //  return person;
 		List<String> userList= new ArrayList<String>();
+		Map<String,List> Data=new HashMap();
 		try{
-			MongoClient mongoClient = new MongoClient( "192.168.0.102" , 27017 );
+			MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
 			DB db = mongoClient.getDB( "TestLite" );
 			DBCollection coll = db.getCollection("UserTable");
 			
@@ -88,6 +88,7 @@ public class JsonController {
 			       userList.add(cursor.next().toString());
 			   }
 			} finally {
+				Data.put("data",userList);
 			   cursor.close();
 			}
 			
@@ -100,7 +101,7 @@ public class JsonController {
 			//Always excecuted
 		}
 		
-		return userList;
+		return Data;
     }
 	
 }
